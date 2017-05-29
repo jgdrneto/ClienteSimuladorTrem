@@ -57,7 +57,7 @@ void menuEscolherTrem(int op, string acao){
                 }else{
                     cout << "5";
                 }
-                cout << " - "<< acao <<" 5º Tr==em" << endl;
+                cout << " - "<< acao <<" 5º Trem" << endl;
             break;
             case 6:
                 if(op==6){
@@ -206,8 +206,10 @@ int main(int argc, char *argv[])
     
     bool sair=false;
     bool conectado=false;
-    bool trensParados=false;
+    bool trensParados=true;
+	//bool primeiraConexao = true;
     std::stringstream buffer;
+	const char *dados ="oi";
 	
 	int valorEscolhido=1;
 
@@ -250,11 +252,13 @@ int main(int argc, char *argv[])
                 if(conectado==false){
                 
                     if(connect(sockfd, (struct sockaddr *) &servaddr, sizeof(servaddr)) ==-1){
-                        std::cout << "Erro em conectar socket" << std::endl;
+                        std::cout << "Erro em conectar socket 2" << std::endl;
                         exit(EXIT_SUCCESS);
                     }
 					
+					//primeiraConexao=false;
 					conectado=true;
+					continue;
                 }else{
                     conectado=false;
                     sair=true;
@@ -263,33 +267,38 @@ int main(int argc, char *argv[])
             break;
             case 2:
                 if(trensParados==true){
-                    buffer << "T: 1 2 3 4 5 6 7\nVL: 40 40 40 40 40 40 40";
+                    buffer << "T: 0VL: 100";
                     trensParados=false;
                 }else{
-                     buffer << "T: 1 2 3 4 5 6 7\nVL: 0 0 0 0 0 0 0";
+                     buffer << "T: 0VL: 0";
                      trensParados =true;
                 }
             break;
             case 3:
-                buffer << "T: " << telaTrens(j1,"Parar") << "\nVL: 0";
+                buffer << "T: " << telaTrens(j1,"Parar") << "VL: 0";
             break;
             case 4:
 
                 int trem = telaTrens(j1,"Mudar velocidade");
 
-                buffer << "T: " << trem << "\nVL: " << velocidadeTrens(j1,trem);
+                buffer << "T: " << trem << "VL: " << velocidadeTrens(j1,trem);
             break;    
         }
 
         //Se conectado manda as informações para o buffer
-        if(conectado==true){
+        if(conectado==true /* && primeiraConexao==true*/){
             //Escrevendo no canal de comunicação do socket
-            if (send(sockfd, buffer.str().c_str(), buffer.str().length(),0)<0){
+			dados = buffer.str().c_str();
+            if (send(sockfd, dados,strlen(dados),0)<0){
                 std::cout << "Erro em enviar informação para o servidor" << std::endl;
                 exit(EXIT_SUCCESS);
             }else{
-                std::cout << "Enviado para o socket: " << buffer.str() << std::endl;
+                std::cout << "Enviado para o socket: " << dados << std::endl;
+				buffer.str("");
+				usleep(3000000);
             }
+			
+			//primeiraConexao=false;
         }
 		
 		//Fechando socket
