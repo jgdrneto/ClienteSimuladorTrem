@@ -1,4 +1,4 @@
-# **README DO PROJETO DE MEMÓRIA**
+# **README DO PROJETO DO CLIENTE PARA O SIMULADOR DE TRENS**
 
 
 ## **Alunos:**
@@ -6,32 +6,29 @@
 ### José gameleira do Rêgo Neto (Email: jgdrneto@gmail.com).
 
 ## **Professor:**
-### Edgard de Fari Correa
-### Ivanovitch Medeiros Dantas Da Silva 
+### Edgard de Faria Correa
+### Ivanovitch Medeiros Dantas da Silva 
 
 
 ## **Descrição:**
 
 ### Objetivo:
 
-Visualizar e monitorar o uso da memória pelos processos em execução.
+Implementar uma solução para sincronização de trens urbanos
+	
+#### A solução deve utilizar as seguintes ferramentas:
+	
+* Semáforos
+* Thread
+* Socket
+* Sinais/Slots
+* Gui (Qt)
+* BeagleBoneBlack (GPIO)
+* Problema de concorrência
 
-### Descrição:
+###CLIENTE
 
-Desenvolver um sistema de visualização de memória para o S.O.
-
-### Requisitos:
-
-O sistema deve ser capaz de indicar a quantidade de:
-
-* Memória principal
-* Cache,
-* Swapping,
-* (Nº de) faltas de páginas por processos.
-
-### Casos omissos:
-
-Projetistas podem implementar de acordo com suas decisões.
+Esse projeto representa a parte do cliente do simulador de trêns elaborado na BeagleBoneBlack.
 
 ## **Importação:**
 
