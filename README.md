@@ -26,7 +26,7 @@ Implementar uma solução para sincronização de trens urbanos
 * BeagleBoneBlack (GPIO)
 * Problema de concorrência
 
-###CLIENTE
+### Cliente
 
 Esse projeto representa a parte do cliente do simulador de trêns elaborado na BeagleBoneBlack.
 
