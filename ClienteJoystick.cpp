@@ -132,7 +132,7 @@ int velocidadeTrens(Joystick& j1, int trem){
         velocidade = j1.escolherVelocidade();
         cout << velocidade << endl;
         
-        usleep(1000000);
+        usleep(150000);
 
     }
 
@@ -149,7 +149,7 @@ int telaTrens(Joystick& j1,string acao){
 
         menuEscolherTrem(valorAtual,acao);
 
-        usleep(1000000);
+        usleep(150000);
 
         valorAtual+= j1.valorBotaoDown()-j1.valorBotaoUp();
 
@@ -176,7 +176,7 @@ int telaPrincipal(Joystick& j1){
 
         menu(valorAtual);
 
-        usleep(1000000);
+        usleep(150000);
 
         valorAtual+= j1.valorBotaoDown()-j1.valorBotaoUp();
 
@@ -195,27 +195,7 @@ int telaPrincipal(Joystick& j1){
 
 int main(int argc, char *argv[])
 {
-    //Criando socket
-
-    //==========================================================
-
-    int     sockfd;
-    struct sockaddr_in servaddr;
-
-    memset(&servaddr, 0x00, sizeof(servaddr));
-    servaddr.sin_family = AF_INET;
-    servaddr.sin_port = htons(PORTNUM);
-    inet_pton(AF_INET, "192.168.7.1", &servaddr.sin_addr);
-
-    sockfd = socket(AF_INET, SOCK_STREAM, 0);
-
-    if (sockfd == -1){
-        std::cout << "Falha ao criar o socket" << std::endl;
-        exit(EXIT_FAILURE);
-    }
-
-    //==========================================================
-
+    
     Joystick j1;
     
     bool sair=false;
@@ -224,6 +204,35 @@ int main(int argc, char *argv[])
     std::stringstream buffer;
 
     while(!sair){
+	
+	//Criando socket
+
+    	//==========================================================
+
+    	int     sockfd;
+    	struct sockaddr_in servaddr;
+
+    	memset(&servaddr, 0x00, sizeof(servaddr));
+    	servaddr.sin_family = AF_INET;
+    	servaddr.sin_port = htons(PORTNUM);
+    	inet_pton(AF_INET, "192.168.7.1", &servaddr.sin_addr);
+
+    	sockfd = socket(AF_INET, SOCK_STREAM, 0);
+
+    	if (sockfd == -1){
+            std::cout << "Falha ao criar o socket" << std::endl;
+       	    exit(EXIT_FAILURE);
+    	}
+
+    	//==========================================================
+	
+	if(conectado==true){
+	    if(connect(sockfd, (struct sockaddr *) &servaddr, sizeof(servaddr)) ==-1){
+                std::cout << "Jogo finalizado" << std::endl;
+                exit(EXIT_SUCCESS);
+            } 	
+	}
+
 
         int valorEscolhido = telaPrincipal(j1);
 
@@ -239,7 +248,6 @@ int main(int argc, char *argv[])
                         conectado=true;
                     }
                 }else{
-                    close(sockfd);
                     conectado=false;
                     sair=true;
                 }    
@@ -274,8 +282,9 @@ int main(int argc, char *argv[])
                 std::cout << "Enviado para o socket: " << buffer.str() << std::endl;
             }
         }
-
-        usleep(1000000);
+	
+	//Fechando socket
+	close(sockfd);
 
     }
 
