@@ -57,7 +57,7 @@ void menuEscolherTrem(int op, string acao){
                 }else{
                     cout << "5";
                 }
-                cout << " - "<< acao <<" 5º Trem" << endl;
+                cout << " - "<< acao <<" 5º Tr==em" << endl;
             break;
             case 6:
                 if(op==6){
@@ -135,6 +135,8 @@ int velocidadeTrens(Joystick& j1, int trem){
         usleep(150000);
 
     }
+	
+	usleep(300000);
 
     return velocidade;
 }
@@ -162,6 +164,8 @@ int telaTrens(Joystick& j1,string acao){
         }
 
     }
+	
+	usleep(300000);
 
     return valorAtual;
 }
@@ -189,6 +193,8 @@ int telaPrincipal(Joystick& j1){
         }
 
     }
+	
+	usleep(300000);
 
     return valorAtual;
 }
@@ -202,6 +208,8 @@ int main(int argc, char *argv[])
     bool conectado=false;
     bool trensParados=false;
     std::stringstream buffer;
+	
+	int valorEscolhido=1;
 
     while(!sair){
 	
@@ -226,27 +234,27 @@ int main(int argc, char *argv[])
 
     	//==========================================================
 	
-	if(conectado==true){
-	    if(connect(sockfd, (struct sockaddr *) &servaddr, sizeof(servaddr)) ==-1){
-                std::cout << "Jogo finalizado" << std::endl;
-                exit(EXIT_SUCCESS);
-            } 	
-	}
+		if(conectado==true){
+	    	if(connect(sockfd, (struct sockaddr *) &servaddr, sizeof(servaddr)) ==-1){
+        	    std::cout << "Erro em conectar socket 111" << std::endl;
+        	    exit(EXIT_SUCCESS);
+        	} 	
+		}
 
 
-        int valorEscolhido = telaPrincipal(j1);
-
+        valorEscolhido = telaPrincipal(j1);
+				
         switch(valorEscolhido){
             case 1:
-
+				
                 if(conectado==false){
                 
                     if(connect(sockfd, (struct sockaddr *) &servaddr, sizeof(servaddr)) ==-1){
-                        std::cout << "Jogo finalizado" << std::endl;
+                        std::cout << "Erro em conectar socket" << std::endl;
                         exit(EXIT_SUCCESS);
-                    }else{
-                        conectado=true;
                     }
+					
+					conectado=true;
                 }else{
                     conectado=false;
                     sair=true;
@@ -266,6 +274,7 @@ int main(int argc, char *argv[])
                 buffer << "T: " << telaTrens(j1,"Parar") << "\nVL: 0";
             break;
             case 4:
+
                 int trem = telaTrens(j1,"Mudar velocidade");
 
                 buffer << "T: " << trem << "\nVL: " << velocidadeTrens(j1,trem);
@@ -276,15 +285,15 @@ int main(int argc, char *argv[])
         if(conectado==true){
             //Escrevendo no canal de comunicação do socket
             if (send(sockfd, buffer.str().c_str(), buffer.str().length(),0)<0){
-                std::cout << "Jogo finalizado" << std::endl;
+                std::cout << "Erro em enviar informação para o servidor" << std::endl;
                 exit(EXIT_SUCCESS);
             }else{
                 std::cout << "Enviado para o socket: " << buffer.str() << std::endl;
             }
         }
-	
-	//Fechando socket
-	close(sockfd);
+		
+		//Fechando socket
+		close(sockfd);
 
     }
 
