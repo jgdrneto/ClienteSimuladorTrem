@@ -131,6 +131,9 @@ int velocidadeTrens(Joystick& j1, int trem){
         cout << "Escolha a velocidade do "<< trem << "º trem: ";
         velocidade = j1.escolherVelocidade();
         cout << velocidade << endl;
+        
+        usleep(1000000);
+
     }
 
     return velocidade;
@@ -145,6 +148,8 @@ int telaTrens(Joystick& j1,string acao){
         system("clear");
 
         menuEscolherTrem(valorAtual,acao);
+
+        usleep(1000000);
 
         valorAtual+= j1.valorBotaoDown()-j1.valorBotaoUp();
 
@@ -170,6 +175,8 @@ int telaPrincipal(Joystick& j1){
         system("clear");
 
         menu(valorAtual);
+
+        usleep(1000000);
 
         valorAtual+= j1.valorBotaoDown()-j1.valorBotaoUp();
 
@@ -266,9 +273,10 @@ int main(int argc, char *argv[])
             }else{
                 std::cout << "Enviado para o socket: " << buffer.str() << std::endl;
             }
-
-            usleep(200000);
         }
+
+        usleep(1000000);
+
     }
 
     std::cout << buffer.str() << std::endl;
